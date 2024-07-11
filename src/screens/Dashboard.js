@@ -1,8 +1,9 @@
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
+import {View, StyleSheet, ScrollView, Text} from 'react-native';
 import TopBar from '../components/TopBar';
 import ClientsCard from '../components/ClientsCard.mjs';
 import {useNavigation} from '@react-navigation/native';
+import appColors from '../assets/config/Appcolor';
 
 const cardData = [
   {
@@ -13,6 +14,8 @@ const cardData = [
     status: 'Active',
     mobNum: '1234567890',
     address: '123 Street, City',
+    innerCleaning: '23 times',
+    outerCleaning: '3434 times',
     isAvailable: true,
   },
   {
@@ -23,8 +26,9 @@ const cardData = [
     status: 'Inactive',
     mobNum: '2345678901',
     address: '456 Avenue, City',
-    available: false,
-    notAvailable: true,
+    innerCleaning: '45667 times',
+    outerCleaning: '123 times',
+    isAvailable: false,
   },
   {
     id: 3,
@@ -34,7 +38,9 @@ const cardData = [
     status: 'Active',
     mobNum: '3456789012',
     address: '789 Boulevard, City',
-    isavailable: true,
+    innerCleaning: '111 times',
+    outerCleaning: '22222 times',
+    isAvailable: true,
   },
   {
     id: 4,
@@ -90,39 +96,64 @@ const cardData = [
 
 const Dashboard = () => {
   const navigation = useNavigation();
-
   const handleOnClickViewDetails = card => {
     console.log('View Details Clicked...', card.name);
     navigation.navigate('LeadDetailsScreen', {cards: card});
   };
 
   return (
-    <View style={{flex: 1, height: '100%', width: '100%'}}>
-      <View>
-        <TopBar heading={'Dashboard'} />
+    <View style={styles.container}>
+      <TopBar heading={'Car Clean Plus'} />
+      <View
+        style={{
+          flexDirection: 'row',
+          marginLeft: 16,
+          marginTop: 8,
+          marginBottom: 8,
+        }}>
+        <Text style={styles.textStyle}>Recent Leads</Text>
       </View>
-      <ScrollView style={{marginTop: 80}}>
-        {cardData.map(card => (
-          <ClientsCard
-          key={card.id}
-            name={card.name}
-            date={card.date}
-            time={card.time}
-            status={card.status}
-            isAvailable={card.isAvailable}
-            notAvailable={card.notAvailable}
-            mobNum={card.mobNum}
-            address={card.address}
-            onPress={() => {
-              handleOnClickViewDetails(card);
-            }}
-          />
-        ))}
+      <ScrollView style={styles.scrollViewContent}>
+        <View style={styles.listContainer}>
+          {cardData.map(card => (
+            <ClientsCard
+              key={card.id}
+              name={card.name}
+              date={card.date}
+              time={card.time}
+              status={card.status}
+              isAvailable={card.isAvailable}
+              notAvailable={card.notAvailable}
+              mobNum={card.mobNum}
+              address={card.address}
+              onPress={() => {
+                handleOnClickViewDetails(card);
+              }}
+            />
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
 };
 
-export default Dashboard;
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+  },
+  scrollViewContent: {
+    paddingBottom: 120,
+  },
+  listContainer: {
+    flex: 1,
+    marginBottom: 120,
+  },
+  textStyle: {
+    color: appColors.primary,
+    fontSize: 20,
+    marginRight: 10,
+    fontWeight: '900',
+  },
+});
 
-const styles = StyleSheet.create({});
+export default Dashboard;

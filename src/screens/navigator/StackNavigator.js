@@ -6,9 +6,9 @@ import LoginScreen from '../LoginScreen';
 import SignupScreen from '../SignupScreen';
 import FaceDetectionScreen from '../FaceDetectionScreen';
 import Dashboard from '../Dashboard';
-import { BottomNavigation } from 'react-native-paper';
 import BottomNavigator from './BottomNavigator';
 import LeadDetailsScreen from '../LeadDetailsScreen';
+import WorkHistoryScreen from '../WorkHistoryScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -51,6 +51,11 @@ export default function StackNavigator() {
         <Stack.Screen
           name="LeadDetailsScreen"
           component={LeadDetailsScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="WorkHistoryScreen"
+          component={WorkHistoryScreen}
           options={{headerShown: false}}
         />
   

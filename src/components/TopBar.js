@@ -6,26 +6,18 @@ import appColors from '../assets/config/Appcolor';
 
 const TopBar = ({heading}) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.topContainer}>
+      <View style={styles.container}>
         <Image source={icon} style={styles.iconStyle} />
         <Text style={styles.textStyle}>{heading}</Text>
       </View>
-    </View>
   );
 };
 
 export default TopBar;
 
 const styles = StyleSheet.create({
+
   container: {
-    flex:1,
-    width: '100%',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    height:65,
-  },
-  topContainer: {
     flexDirection: 'row',
     backgroundColor: appColors.primary,
     width: '94%',
@@ -34,7 +26,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    alignSelf:'center',
+    justifyContent:'space-between',
+  
   },
   iconStyle: {
     width: 100,
@@ -44,6 +38,8 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: 'white',
-    fontSize: 15,
+    fontSize: 20   ,
+    marginRight:10,
+    fontWeight:'900'
   },
 });

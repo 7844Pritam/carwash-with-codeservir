@@ -1,12 +1,20 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, FlatList, LayoutAnimation, Platform, UIManager } from 'react-native';
 import { Button } from 'react-native-paper';
 import appColors from '../assets/config/Appcolor';
+
+// Enable LayoutAnimation for Android
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 const ExpandableListItem = ({ item }) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const toggleExpand = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded(!expanded);
   };
 
@@ -30,22 +38,15 @@ const LeadDetailsScreen = ({ route, navigation }) => {
   const data = [
     {
       id: 1,
-      title: 'What Is JavaScript',
-      content:
-        'JavaScript (JS) is the most popular lightweight, interpreted compiled programming language. It can be used for both Client-side as well as Server-side developments. JavaScript also known as a scripting language for web pages.',
+      title: 'Outer Cleaning',
+      content:cards.innerCleaning,
+               
     },
     {
       id: 2,
-      title: 'Geeksforgeeks',
-      content:
-        'A Computer Science portal for geeks. It contains well written, well thought and well explained computer science and programming articles.',
-    },
-    {
-      id: 3,
-      title: 'What Is Python',
-      content:
-        'Python is a high-level, general-purpose, and very popular programming language. Python programming language (latest Python 3) is being used in web development, Machine Learning applications, along with all cutting-edge technology in Software Industry.',
-    },
+      title: 'Inner Cleaning',
+      content:cards.outerCleaning,   },
+   
   ];
 
   return (
@@ -69,10 +70,7 @@ const LeadDetailsScreen = ({ route, navigation }) => {
             <Text style={styles.cardText}>Vehicle Number: {cards.vehicleNumber}</Text>
           </View>
         </View>
-
-
         
-       
         <FlatList
           style={styles.expandable}
           ListHeaderComponent={<Text style={styles.heading}>Work History</Text>}
@@ -130,7 +128,6 @@ const styles = StyleSheet.create({
   heading: {
     color: appColors.white,
     fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
   },

@@ -6,9 +6,9 @@ import appColors from '../assets/config/Appcolor';
 import logo from '../assets/images/logo2.png';
 import Google from '../assets/images/google.png';
 import Facebook from '../assets/images/facebook.png';
-import {ScrollView} from 'react-native/types';
 import {useNavigation} from '@react-navigation/native';
 import car1 from '../assets/images/car1.png';
+
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -34,6 +34,7 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
+      
       <Text style={styles.title}>CAR WASH</Text>
       <Image style={styles.logo} source={logo} />
 
