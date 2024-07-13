@@ -1,6 +1,15 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, FlatList, LayoutAnimation, Platform, UIManager } from 'react-native';
-import { Button } from 'react-native-paper';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+} from 'react-native';
+import {Button} from 'react-native-paper';
 import appColors from '../assets/config/Appcolor';
 
 // Enable LayoutAnimation for Android
@@ -10,7 +19,7 @@ if (Platform.OS === 'android') {
   }
 }
 
-const ExpandableListItem = ({ item }) => {
+const ExpandableListItem = ({item}) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const toggleExpand = () => {
@@ -32,28 +41,27 @@ const ExpandableListItem = ({ item }) => {
   );
 };
 
-const LeadDetailsScreen = ({ route, navigation }) => {
-  const { cards } = route.params;
+const LeadDetailsScreen = ({route, navigation}) => {
+  const {cards} = route.params;
 
   const data = [
     {
       id: 1,
       title: 'Outer Cleaning',
-      content:cards.innerCleaning,
-               
+      content: cards.innerCleaning,
     },
     {
       id: 2,
       title: 'Inner Cleaning',
-      content:cards.outerCleaning,   },
-   
+      content: cards.outerCleaning,
+    },
   ];
 
   return (
     <View style={styles.container}>
       <View style={styles.rectangle} />
       <Button style={styles.button} onPress={() => navigation.goBack()}>
-        <Text style={{ color: appColors.white }}>Back</Text>
+        <Text style={{color: appColors.white}}>Back</Text>
       </Button>
       <View style={styles.bgRectangle}>
         <View style={styles.cardOne}>
@@ -67,15 +75,17 @@ const LeadDetailsScreen = ({ route, navigation }) => {
             <Text style={styles.cardText}>Address: {cards.address}</Text>
           </View>
           <View style={styles.cardContent}>
-            <Text style={styles.cardText}>Vehicle Number: {cards.vehicleNumber}</Text>
+            <Text style={styles.cardText}>
+              Vehicle Number: {cards.vehicleNumber}
+            </Text>
           </View>
         </View>
-        
+
         <FlatList
           style={styles.expandable}
           ListHeaderComponent={<Text style={styles.heading}>Work History</Text>}
           data={data}
-          renderItem={({ item }) => <ExpandableListItem item={item} />}
+          renderItem={({item}) => <ExpandableListItem item={item} />}
           keyExtractor={item => item.id.toString()}
         />
       </View>

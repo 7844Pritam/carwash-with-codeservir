@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, StyleSheet, ScrollView, Text} from 'react-native';
-import TopBar from '../components/TopBar';
-import ClientsCard from '../components/ClientsCard.mjs';
+import TopBar from '../../components/TopBar';
+import ClientsCard from '../../components/ClientsCard.mjs';
 import {useNavigation} from '@react-navigation/native';
-import appColors from '../assets/config/Appcolor';
+import appColors from '../../assets/config/Appcolor';
 
 const cardData = [
   {
@@ -94,7 +94,7 @@ const cardData = [
   },
 ];
 
-const Dashboard = () => {
+const AdminDashboardScreen = () => {
   const navigation = useNavigation();
   const handleOnClickViewDetails = card => {
     console.log('View Details Clicked...', card.name);
@@ -123,7 +123,6 @@ const Dashboard = () => {
               time={card.time}
               status={card.status}
               isAvailable={card.isAvailable}
-              notAvailable={card.notAvailable}
               mobNum={card.mobNum}
               address={card.address}
               onPress={() => {
@@ -147,6 +146,7 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     marginBottom: 120,
+    marginHorizontal: '3%',
   },
   textStyle: {
     color: appColors.primary,
@@ -156,4 +156,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Dashboard;
+export default AdminDashboardScreen;

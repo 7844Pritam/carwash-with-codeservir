@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, TextInput, Image, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
 
-const CustomInputField = ({ leftIcon, rightIcon, placeholder, ...rest }) => {
+const CustomInputField = ({ leftIcon, rightIcon, placeholder,onChangeText,value, ...rest }) => {
   return (
     <View style={styles.inputContainer}>
       {leftIcon && <Image source={leftIcon} style={styles.leftIcon} />}
@@ -10,6 +11,8 @@ const CustomInputField = ({ leftIcon, rightIcon, placeholder, ...rest }) => {
         placeholder={placeholder}
         placeholderTextColor="#bfbfbf"
         {...rest}
+        onChangeText={onChangeText}
+        value={value}
       />
       {rightIcon && <Image source={rightIcon} style={styles.rightIcon} />}
     </View>

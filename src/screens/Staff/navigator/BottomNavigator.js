@@ -2,8 +2,9 @@ import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Dashboard from '../Dashboard';
-import ProfileScreen from '../ProfileScreen';
-import SalaryScreen from '../SalaryScreen';
+import ProfileScreen from '../../ProfileScreen';
+import SalaryScreen from '../../SalaryScreen';
+import appColors from '../../../assets/config/Appcolor';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -21,7 +22,7 @@ function BottomNavigator() {
           options={{
             tabBarIcon: ({ focused }) => (
               <Image
-                source={focused ? require('../../assets/images/png/home_fill.png') : require('../../assets/images/png/home.png')}
+                source={focused ? require('../../../assets/images/png/home_fill.png') : require('../../../assets/images/png/home.png')}
                 style={styles.icon}
               />
             ),
@@ -33,7 +34,7 @@ function BottomNavigator() {
           options={{
             tabBarIcon: ({ focused }) => (
               <Image
-                source={focused ? require('../../assets/images/png/orders_fill.png') : require('../../assets/images/png/orders.png')}
+                source={focused ? require('../../../assets/images/png/orders_fill.png') : require('../../../assets/images/png/orders.png')}
                 style={styles.icon}
               />
             ),
@@ -45,7 +46,7 @@ function BottomNavigator() {
           options={{
             tabBarIcon: ({ focused }) => (
               <Image
-                source={focused ? require('../../assets/images/png/person_fill.png') : require('../../assets/images/png/persion.png')}
+                source={focused ? require('../../../assets/images/png/person_fill.png') : require('../../../assets/images/png/persion.png')}
                 style={styles.icon}
               />
             ),
@@ -59,14 +60,19 @@ function BottomNavigator() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+
+    overflow: 'hidden', 
   },
   barStyle: {
-    backgroundColor: '#fff',
-    marginBottom: 10,
-    marginHorizontal: 10,
-    borderTopEndRadius: 20,
+    backgroundColor: appColors.white,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowOffset: { width: 0, height: 2 },
+    overflow: 'hidden',
+    borderWidth:0.5,
+    borderColor:'rgba(0, 0, 0, 0.3)'
   },
+  
   icon: {
     width: 24,
     height: 24,

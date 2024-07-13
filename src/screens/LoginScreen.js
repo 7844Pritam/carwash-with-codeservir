@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
 import CustomInputField from '../components/CustomInputField';
 import CustomButton from '../components/CustomButton'; // Import the CustomButton component
@@ -13,8 +13,32 @@ import car1 from '../assets/images/car1.png';
 const LoginScreen = () => {
   const navigation = useNavigation();
 
+
+const [email, setEmail] = useState("");
+const [password, setpassword] = useState("");
+
+const handleEmailChange = (text) => {
+  setEmail(text);
+};
+
+const handlePasswordChange = (text) => {
+  setpassword(text);
+};
   const handleLogin = () => {
-    navigation.navigate('FaceDetectionScreen');
+    // navigation.navigate('FaceDetectionScreen');
+    if(email == "admin" && password == "12345")
+    {
+      navigation.navigate('AdminBottomNavigator');
+
+    }
+    else
+    {
+    //  navigation.navigate('FaceDetectionScreen');
+     navigation.navigate('AdminBottomNavigator');
+
+    }
+    console.log("Email",email);
+    console.log("Password",password);
   };
 
   const handleForgotPassword = () => {
@@ -31,7 +55,7 @@ const LoginScreen = () => {
   const handleFacebookSignUp = () => {
     navigation.navigate('SignupScreen');
   };
-
+ 
   return (
     <View style={styles.container}>
       
@@ -43,12 +67,18 @@ const LoginScreen = () => {
         keyboardType="email-address"
         autoCapitalize="none"
         autoCompleteType="email"
+        onChangeText={handleEmailChange}
+        value={email}
+      
+        
       />
       <CustomInputField
         placeholder="Password"
         secureTextEntry
         autoCapitalize="none"
         autoCompleteType="password"
+        onChangeText={handlePasswordChange}
+        value={password}
       />
 
       <TouchableOpacity
@@ -64,13 +94,11 @@ const LoginScreen = () => {
           style={styles.socialButton}
           onPress={handleGoogleSignIn}>
           <Image source={Facebook} style={styles.logins} />
-          {/* <FontAwesome name="google" size={24} color="white" /> */}
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.socialButton}
           onPress={handleFacebookSignIn}>
           <Image source={Google} style={styles.logins} />
-          {/* <AntDesign name="facebook-square" size={24} color="white" /> */}
         </TouchableOpacity>
       </View>
       <View style={styles.rectangleContainer}>

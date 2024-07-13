@@ -39,7 +39,7 @@ const ClientsCard = ({key,name,date,time, status, isAvailable, mobNum, address,o
         </View>
         <View style={styles.availability}>
           <Text style={isAvailable ? styles.available : styles.notAvailable}>
-            {{isAvailable} ? 'Available' : 'Not Available'}
+            {isAvailable? 'Available' : 'Not Available'}
           </Text>
         </View>
       </View>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     marginVertical: 10,
-    marginHorizontal: '3%',
+
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,

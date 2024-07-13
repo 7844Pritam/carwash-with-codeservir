@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     padding: 20,
     marginTop: 20,
+    marginBottom: -20,
 
   },
   rectangleContainerUp: {
@@ -95,18 +96,18 @@ const styles = StyleSheet.create({
     top: 0,
     zIndex: -1000,
   },
-  rectangleContainerDown: {
-    backgroundColor: appColors.secondary,
-    width: '100%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    height: 250,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    bottom: 0,
-    zIndex: -1000,
-  },
+  // rectangleContainerDown: {
+  //   backgroundColor: appColors.secondary,
+  //   width: '100%',
+  //   borderTopLeftRadius: 20,
+  //   borderTopRightRadius: 20,
+  //   height: 250,
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   position: 'absolute',
+  //   bottom: 0,
+  //   zIndex: -1000,
+  // },
   image: {
     width: 100,
     height: 100,
@@ -120,7 +121,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     borderRadius: 50,
-    // backgroundColor:'red'
   },
   earningsBox: {
     backgroundColor: appColors.secondary,

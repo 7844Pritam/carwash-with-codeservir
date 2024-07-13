@@ -1,15 +1,18 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SplashScreen from '../SplashScreen';
-import LoginScreen from '../LoginScreen';
-import SignupScreen from '../SignupScreen';
-import FaceDetectionScreen from '../FaceDetectionScreen';
-import Dashboard from '../Dashboard';
-import BottomNavigator from './BottomNavigator';
-import LeadDetailsScreen from '../LeadDetailsScreen';
-import WorkHistoryScreen from '../WorkHistoryScreen';
-
+import SignupScreen from './SignupScreen';
+import Dashboard from './Staff/Dashboard';
+import BottomNavigator from './Staff/navigator/BottomNavigator';
+import LeadDetailsScreen from './LeadDetailsScreen';
+import WorkHistoryScreen from './WorkHistoryScreen';
+import LoginScreen from './LoginScreen';
+import SplashScreen from './SplashScreen';
+import FaceDetectionScreen from './FaceDetectionScreen';
+import AdminDashboardScreen from './Admin/AdminDashboardScreen';
+import AdminBottomNavigator from './Admin/adminNavigator/AdminBottomNavigator';
+import FormScreen from './Admin/FormScreen';
+import AttandanceScreen from './AttandanceScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,7 +30,7 @@ export default function StackNavigator() {
           component={LoginScreen}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="SignupScreen"
           component={SignupScreen}
           options={{headerShown: false}}
@@ -42,7 +45,7 @@ export default function StackNavigator() {
           component={Dashboard}
           options={{headerShown: false}}
         />
-  
+
         <Stack.Screen
           name="BottomNavigator"
           component={BottomNavigator}
@@ -58,8 +61,24 @@ export default function StackNavigator() {
           component={WorkHistoryScreen}
           options={{headerShown: false}}
         />
-  
-        
+        <Stack.Screen
+          name="AttandanceScreen"
+          component={AttandanceScreen}
+          options={{headerShown: false}}
+        />
+        {/* Admin Related Navigation  */}
+     
+        <Stack.Screen
+          name="AdminBottomNavigator"
+          component={AdminBottomNavigator}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="FormScreen"
+          component={FormScreen}
+          options={{headerShown: false}}
+        />
+     
       </Stack.Navigator>
     </NavigationContainer>
   );

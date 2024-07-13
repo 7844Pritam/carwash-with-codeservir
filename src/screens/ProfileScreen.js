@@ -3,39 +3,61 @@ import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import appColors from '../assets/config/Appcolor';
 import TopBar from '../components/TopBar';
 import { useNavigation } from '@react-navigation/native';
+import cameraImage from '../assets/images/png/camera.png';
+import dummyImage from '../assets/images/png/persion_dummy.png';
 
 const ProfileScreen = () => {
-
   const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-
-     <TopBar heading={'Profile'}/>
-     
-      <View style={styles.rectangleContainerUp}></View>
+      <TopBar heading={'Profile'} />
       <View style={styles.profileBox}>
-        <Image
-          source={require('../assets/images/logo2.png')}
-          style={styles.image}
-        />
-        <Text style={styles.profileName}>John Doe</Text>
-        <Text style={styles.profileInfo}>Software Engineer</Text>
-        <Text style={styles.profileInfo}>john.doe@example.com</Text>
-
-        <View style={styles.buttonBox}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('WorkHistoryScreen')}>
-            <Text style={styles.buttonText}>Salary History</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('WorkHistoryScreen')}>
-            <Text style={styles.buttonText}>Work History</Text>
+        <View style={styles.imageContainer}>
+          <Image source={dummyImage} style={styles.image} />
+          <TouchableOpacity style={styles.editIcon}>
+            <Image source={cameraImage} style={styles.editIconImage} />
+            <Text style={styles.editIconText}>Edit</Text>
           </TouchableOpacity>
         </View>
+
+        <View style={styles.detailsSection}>
+          <Text style={styles.sectionTitle}>Personal Details</Text>
+          <View style={styles.separator} />
+          <View style={styles.detailItem}>
+            <Image source={cameraImage} style={styles.detailIcon} />
+            <Text style={styles.profileInfo}>Software Engineer</Text>
+          </View>
+          <View style={styles.detailItem}>
+            <Image source={cameraImage} style={styles.detailIcon} />
+            <Text style={styles.profileInfo}>john.doe@example.com</Text>
+          </View>
+        </View>
+
+        <View style={styles.detailsSection}>
+          <Text style={styles.sectionTitle}>Contact Details</Text>
+          <View style={styles.separator} />
+          <View style={styles.detailItem}>
+            <Image source={cameraImage} style={styles.detailIcon} />
+            <Text style={styles.profileInfo}>Mob Number: 34344344534</Text>
+          </View>
+        </View>
+
+        <View style={styles.detailsSection}>
+          <Text style={styles.sectionTitle}>Others</Text>
+          <View style={styles.separator} />
+          <View style={styles.detailItem}>
+            <Image source={cameraImage} style={styles.detailIcon} />
+            <Text style={styles.profileInfo}>Salary History</Text>
+            <Text style={styles.linkText}>Click to View</Text>
+          </View>
+          <View style={styles.detailItem}>
+            <Image source={cameraImage} style={styles.detailIcon} />
+            <Text style={styles.profileInfo}>Work History</Text>
+            <Text style={styles.linkText}>Click to View</Text>
+          </View>
+        </View>
       </View>
-      <View style={styles.rectangleContainerDown}></View>
     </View>
   );
 };
@@ -43,79 +65,77 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    backgroundColor: appColors.white,
   },
   profileBox: {
-    width: '95%',
-    height: 550,
-    borderWidth: 1,
-    backgroundColor: appColors.primary,
-    borderColor: appColors.white,
-    alignItems: 'center',
-    borderRadius: 10,
-    padding: 20,
-    marginTop:20
+    padding: 16,
   },
-  rectangleContainerUp: {
-    backgroundColor: appColors.secondary,
-    width: '100%',
-    height: 200,
+  imageContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    top: 0,
-    zIndex: -1000,
-  },
-  rectangleContainerDown: {
-    backgroundColor: appColors.secondary,
-    width: '100%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    height: 250,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    bottom: 0,
-    zIndex: -1000,
+    marginBottom: 20,
   },
   image: {
     width: 100,
     height: 100,
-    marginBottom: 20,
-    borderColor: appColors.white,
-    borderWidth: 1,
-    borderRadius: 100,
+    borderColor: appColors.secondary,
+    borderWidth: 2,
+    borderRadius: 50,
   },
-  profileName: {
-    fontSize: 24,
+  editIcon: {
+    position: 'absolute',
+    bottom: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: appColors.white,
+    borderWidth: 1,
+    borderColor: appColors.secondary,
+    borderRadius: 50,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  editIconImage: {
+    width: 20,
+    height: 20,
+    marginRight: 4,
+  },
+  editIconText: {
+    color: appColors.primary,
+    fontSize: 14,
+  },
+  detailsSection: {
+    width: '100%',
+    marginVertical: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
-    color: appColors.white,
+    color: appColors.black,
     marginBottom: 10,
+  },
+  detailItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  detailIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 10,
   },
   profileInfo: {
     fontSize: 16,
-    color: appColors.white,
-    marginBottom: 5,
+    color: appColors.black,
   },
-  buttonBox: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: appColors.secondary,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  buttonText: {
+  linkText: {
     fontSize: 16,
-    color: 'white',
-    fontWeight: 'bold',
+    color: appColors.primary,
+    marginLeft: 10,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: appColors.secondary,
+    width: '100%',
+    marginVertical: 10,
   },
 });
 
