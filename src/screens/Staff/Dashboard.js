@@ -117,7 +117,7 @@ const Dashboard = () => {
         <View style={styles.listContainer}>
           {cardData.map(card => (
             <ClientsCard
-              key={card.id}
+              
               name={card.name}
               date={card.date}
               time={card.time}

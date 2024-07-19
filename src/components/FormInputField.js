@@ -9,6 +9,7 @@ const FormInputField = ({
   onChangeText,
   value,
   label,
+  keyboardType,
   ...rest
 }) => {
   return (
@@ -25,6 +26,7 @@ const FormInputField = ({
           {...rest}
           onChangeText={onChangeText}
           value={value}
+          keyboardType={keyboardType}
         />
         {rightIcon && <Image source={rightIcon} style={styles.rightIcon} />}
       </View>

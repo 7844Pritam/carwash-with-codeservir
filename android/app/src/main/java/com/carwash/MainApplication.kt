@@ -1,4 +1,4 @@
-package com.carwash
+package com.codeservir.carwash
 
 import android.app.Application
 import com.facebook.react.PackageList

@@ -1,29 +1,95 @@
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
 import CustomInputField from '../components/CustomInputField';
 import CustomButton from '../components/CustomButton';
 import appColors from '../assets/config/Appcolor';
 import logo from '../assets/images/logo2.png';
 import Google from '../assets/images/google.png';
 import Facebook from '../assets/images/facebook.png';
-import car1 from '../assets/images/car1.png'
+import car1 from '../assets/images/png/person.png';
+import lock from '../assets/images/png/lock.png';
+import mobileIcon from '../assets/images/png/mobileIcon.png';
+import aadharIcon from '../assets/images/png/aadharIcon.png';
+import cakeIcon from '../assets/images/png/cakeIcon.png';
 
-const SignupScreen = ({navigation}) => {
-  const [name, setName] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
-  const [aadhar, setAadhar] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+const SignupScreenNextPage = ({navigation}) => {
+  const [signUpData, setSignUpData] = useState({
+    name: '',
+    mobileNumber: '',
+    aadhaarNumber: '',
+    dateOfBirth: '',
+  });
 
-  const handleSignup = () => {
-    console.log('Signup button pressed');
+  const [errors, setFieldErrors] = useState({
+    name: '',
+    mobileNumber: '',
+    aadhaarNumber: '',
+    dateOfBirth: '',
+  });
+
+  const validateField = (field, value) => {
+    switch (field) {
+      case 'name':
+        return (
+          validateLength(value, 3, 'Name must be at least 3 characters') ||
+          validateRequired(value, 'Name is required')
+        );
+      case 'mobileNumber':
+        return (
+          validateNumber(value, 10, 'Mobile number must be 10 digits') ||
+          validateRequired(value, 'Mobile number is required')
+        );
+      case 'aadhaarNumber':
+        return (
+          validateNumber(value, 12, 'Aadhaar number must be 12 digits') ||
+          validateRequired(value, 'Aadhaar number is required')
+        );
+      case 'dateOfBirth':
+        return validateRequired(value, 'Date of Birth is required');
+      default:
+        return '';
+    }
+  };
+
+  const validateLength = (value, minLength, errorMessage) => {
+    return value.length >= minLength ? '' : errorMessage;
+  };
+
+  const validateNumber = (value, length, errorMessage) => {
+    return /^\d+$/.test(value) && value.length === length ? '' : errorMessage;
+  };
+
+  const validateRequired = (value, errorMessage) => {
+    return value.trim() !== '' ? '' : errorMessage;
+  };
+
+  const onChangeText = (field, text) => {
+    setSignUpData({...signUpData, [field]: text});
+    const error = validateField(field, text);
+    setFieldErrors({...errors, [field]: error});
+  };
+
+  const validateAllFields = () => {
+    const errors = {};
+    Object.keys(signUpData).forEach(field => {
+      const value = signUpData[field];
+      const error = validateField(field, value);
+      errors[field] = error;
+    });
+    setFieldErrors(errors);
+    const isValid = Object.values(errors).every(error => !error);
+
+    return isValid;
+  };
+
+  const handleContinueSignup = () => {
+    const isValid = validateAllFields();
+    if (isValid) {
+      console.log('Go');
+      navigation.navigate('SignupScreenNextPage', {signUpDatas: signUpData});
+    } else {
+      console.log('Please fill out the form carefully');
+    }
   };
 
   const handleLogin = () => {
@@ -37,107 +103,108 @@ const SignupScreen = ({navigation}) => {
   const handleFacebookSignIn = () => {
     console.log('Facebook sign in pressed');
   };
-  return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Sign Up</Text>
-        <Image style={styles.logo} source={logo} />
 
+  return (
+    <View style={styles.container}>
+      <Image style={styles.logo} source={logo} />
+      <Text style={styles.title}>Sign Up</Text>
+      <View style={{width: '100%'}}>
         <CustomInputField
           placeholder="Name"
-          value={name}
-          onChangeText={setName}
+          value={signUpData.name}
+          onChangeText={text => onChangeText('name', text)}
           autoCapitalize="words"
+          error={errors.name}
+          leftIcon={car1}
         />
+        {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
+
         <CustomInputField
           placeholder="Mobile Number"
-          value={mobileNumber}
-          onChangeText={setMobileNumber}
-          keyboardType="phone-pad"
-          autoCompleteType="tel"
-        />
-        <CustomInputField
-          placeholder="Aadhar Number"
-          value={aadhar}
-          onChangeText={setAadhar}
+          value={signUpData.mobileNumber}
+          onChangeText={text => onChangeText('mobileNumber', text)}
           keyboardType="numeric"
+          error={errors.mobileNumber}
+          leftIcon={mobileIcon}
         />
+        {errors.mobileNumber && (
+          <Text style={styles.errorText}>{errors.mobileNumber}</Text>
+        )}
+
         <CustomInputField
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
+          placeholder="Aadhaar Number"
+          value={signUpData.aadhaarNumber}
+          onChangeText={text => onChangeText('aadhaarNumber', text)}
+          keyboardType="numeric"
+          error={errors.aadhaarNumber}
+          leftIcon={aadharIcon}
         />
+        {errors.aadhaarNumber && (
+          <Text style={styles.errorText}>{errors.aadhaarNumber}</Text>
+        )}
+
         <CustomInputField
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
+          placeholder="Date of Birth (DD/MM/YYYY)"
+          value={signUpData.dateOfBirth}
+          onChangeText={text => onChangeText('dateOfBirth', text)}
+          keyboardType="numeric"
+          error={errors.dateOfBirth}
+          leftIcon={cakeIcon}
         />
-
-        <CustomButton
-          title="Sign Up"
-          onPress={handleSignup}
-          style={styles.signupButton}
-        />
-
-        <View style={styles.loginContainer}>
-          <Text style={styles.loginText}>Already have an account? </Text>
-          <TouchableOpacity onPress={handleLogin}>
-            <Text style={styles.loginLink}>Login</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.socialLoginContainer}>
-          <TouchableOpacity
-            style={styles.socialButton}
-            onPress={handleGoogleSignIn}>
-            <Image source={Facebook} style={styles.logins} />
-            {/* <FontAwesome name="google" size={24} color="white" /> */}
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.socialButton}
-            onPress={handleFacebookSignIn}>
-            <Image source={Google} style={styles.logins} />
-            {/* <AntDesign name="facebook-square" size={24} color="white" /> */}
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.rectangleContainer}>
-        <View style={styles.car1}>
-          {/* <Image source={car1} /> */}
-        </View>
-
+        {errors.dateOfBirth && (
+          <Text style={styles.errorText}>{errors.dateOfBirth}</Text>
+        )}
       </View>
 
+      <CustomButton
+        title="Continue"
+        onPress={handleContinueSignup}
+        style={styles.signupButton}
+      />
+
+      <View style={styles.loginContainer}>
+        <Text style={styles.loginText}>Already have an account? </Text>
+        <TouchableOpacity onPress={handleLogin}>
+          <Text style={styles.loginLink}>Login</Text>
+        </TouchableOpacity>
       </View>
+
+      <View style={styles.socialLoginContainer}>
+        <TouchableOpacity
+          style={styles.socialButton}
+          onPress={handleGoogleSignIn}>
+          <Image source={Google} style={styles.logins} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.socialButton}
+          onPress={handleFacebookSignIn}>
+          <Image source={Facebook} style={styles.logins} />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.rectangleContainer}></View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    backgroundColor: appColors.primary,
+    flex: 1,
+    backgroundColor: appColors.white,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 40,
     paddingHorizontal: 20,
-
   },
- 
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: 'bold',
-    color: appColors.white,
-    marginTop: 20,
+    color: appColors.secondary,
+    marginBottom: 20,
   },
   logo: {
-    width: 150,
-    height: 150,
-   
-  },
-  inputField: {
-    width: '100%',
-    marginBottom: 20,
+    width: 300,
+    height: 110,
   },
   signupButton: {
     marginTop: 20,
@@ -148,10 +215,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   loginText: {
-    color: appColors.white,
+    color: appColors.primary,
   },
   loginLink: {
-    color: '#fff',
+    color: '#000',
     fontWeight: 'bold',
     textDecorationLine: 'underline',
   },
@@ -176,22 +243,26 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: appColors.secondary,
     bottom: -60,
-    width: 450,
+    width: '130%',
     borderTopLeftRadius: 50,
     borderTopRightRadius: 80,
-    height: 250,
+    height: '40%',
     alignItems: 'center',
     justifyContent: 'center',
     transform: [{skewY: '10deg'}],
-    zIndex: -1000, // Set zIndex to 0
+    zIndex: -1000,
   },
   car1: {
     flex: 1,
     position: 'absolute',
- 
     top: 50,
     transform: [{skewY: '-10deg'}],
   },
+  errorText: {
+    color: 'red',
+    marginTop: -10,
+    marginBottom: 10,
+  },
 });
 
-export default SignupScreen;
+export default SignupScreenNextPage;

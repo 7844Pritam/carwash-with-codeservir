@@ -1,4 +1,4 @@
-package com.carwash
+package com.codeservir.carwash
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

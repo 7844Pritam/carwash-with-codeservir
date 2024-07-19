@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,175 +7,178 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
-  Dimensions,
 } from 'react-native';
-import { Appbar, Card, Button } from 'react-native-paper';
+import {Appbar, Card, BottomNavigation, Button} from 'react-native-paper';
 import TopBar from '../../components/TopBar';
 import appColors from '../../assets/config/Appcolor';
-import { useNavigation } from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import ClientsCard from '../../components/ClientsCard.mjs';
 
-const { width } = Dimensions.get('window');
+import car11 from '../../assets/images/caresoulImg/car111.jpg';
+import car33 from '../../assets/images/caresoulImg/car222.jpg';
+import car22 from '../../assets/images/caresoulImg/car333.jpg';
+
+import firestore from '@react-native-firebase/firestore';
+
+
 
 const LandingPage = () => {
   const navigation = useNavigation();
+  const [leadsCount, setleadsCount] = useState(0);
+  const [usersCount, setusersCount] = useState(0);
+  const [leadsList, setLeadsList] = useState([]);
+  
   const handleonFaviconButton = () => {
     navigation.navigate('FormScreen');
   };
 
-  const cardData = [
-    {
-      id: 1,
-      name: 'Mohit',
-      date: '12/12/12',
-      time: '23:34',
-      status: 'Active',
-      mobNum: '1234567890',
-      address: '123 Street, City',
-      innerCleaning: '23 times',
-      outerCleaning: '3434 times',
-      isAvailable: true,
-    },
-    {
-      id: 2,
-      name: 'John',
-      date: '01/01/23',
-      time: '10:00',
-      status: 'Inactive',
-      mobNum: '2345678901',
-      address: '456 Avenue, City',
-      innerCleaning: '45667 times',
-      outerCleaning: '123 times',
-      isAvailable: false,
-    },
-    {
-      id: 3,
-      name: 'Jane',
-      date: '02/02/23',
-      time: '11:30',
-      status: 'Active',
-      mobNum: '3456789012',
-      address: '789 Boulevard, City',
-      innerCleaning: '111 times',
-      outerCleaning: '22222 times',
-      isAvailable: true,
-    },
+  const data = [
+    {id: '1', title: 'Item 1', image: car11},
+    {id: '2', title: 'Item 2', image: car22},
+    {id: '3', title: 'Item 3', image: car33},
   ];
 
-  const flatListRef = useRef(null);
+  const renderItem = ({item}) => (
+    <View style={styles.itemContainer}>
+      <Image source={item.image} style={styles.itemImage} />
+      <Text style={styles.itemTitle}>{item.title}</Text>
+    </View>
+  );
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (flatListRef.current) {
-        flatListRef.current.scrollToIndex({
-          animated: true,
-          index: (currentIndex + 1) % cardData.length,
-        });
-      }
-    }, 4000);
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchLeadsData = async () => {
+        try {
+          const datas = await firestore().collection('Leads').get();
+          if (!datas.empty) {
+            setLeadsList(datas.docs.map(doc => doc.data()));
+            setleadsCount(datas.size);
+            console.log(datas.size);
+          } else {
+            setleadsCount(0);
+          }
+        } catch (e) {
+          console.log(e.message);
+        }
+      };
 
-    return () => clearInterval(interval);
-  }, []);
+      const fetchStaffData = async () => {
+        try {
+          const usersdatas = await firestore().collection('users').get();
+          if (!usersdatas.empty) {
+            setusersCount(usersdatas.size);
+            console.log(usersdatas.size);
+          } else {
+            setusersCount(0);
+          }
+        } catch (e) {
+          console.log(e.message);
+        }
+      };
 
-  let currentIndex = 0;
+      fetchStaffData();
+      fetchLeadsData();
+    }, [])
+  );
 
-  const renderMainCard = ({ item, index }) => {
-    const position = index === currentIndex ? 'middle' : index < currentIndex ? 'left' : 'right';
-    const cardWidth = position === 'middle' ? width * 0.8 : width * 0.4;
-    const mainCardStyle = {
-      ...styles.mainCard,
-      width: cardWidth,
-    };
-    return (
-      <View style={mainCardStyle}>
-        <Text style={styles.mainCardText}>Number of Vehicle </Text>
-        <View style={styles.circularProgress}>
-          <Text>34</Text>
-        </View>
-      </View>
-    );
+
+
+  const handleOnClickViewDetails = card => {
+    console.log('View Details Clicked...', card.name);
+    navigation.navigate('LeadDetailsScreen', {cards: card});
   };
+
 
   return (
     <>
       <TopBar heading={'Car Clean Plus'} />
       <Text style={styles.headerText}>Overview</Text>
 
-      <FlatList
-        ref={flatListRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        data={cardData}
-        renderItem={renderMainCard}
-        keyExtractor={(item) => item.id.toString()}
-        onMomentumScrollEnd={(event) => {
-          currentIndex = Math.round(event.nativeEvent.contentOffset.x / width);
-        }}
-      />
-
-      <View style={styles.overviewCards}>
-        <Card style={styles.card}>
-          <Card.Content>
-            <Text style={styles.cardText}>Number of clients</Text>
-            <Text style={styles.cardNumber}>34</Text>
-          </Card.Content>
-        </Card>
-        <Card style={styles.card}>
-          <Card.Content>
-            <Text style={styles.cardText}>Number of Staff</Text>
-            <Text style={styles.cardNumber}>34</Text>
-          </Card.Content>
-        </Card>
-      </View>
-
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <Text style={styles.headerText2}>Recent Leads</Text>
-        <Text style={styles.headerText3}>View More</Text>
-      </View>
-      <View style={styles.listContainer}>
-        {cardData.map((card) => (
-          <ClientsCard
-            key={card.id}
-            name={card.name}
-            date={card.date}
-            time={card.time}
-            status={card.status}
-            isAvailable={card.isAvailable}
-            mobNum={card.mobNum}
-            address={card.address}
-            onPress={() => {
-              handleOnClickViewDetails(card);
-            }}
-          />
-        ))}
-      </View>
-
-      <TouchableOpacity onPress={handleonFaviconButton} style={styles.favIcon}>
-        <Image
-          style={{ height: 20, width: 20, marginRight: 5 }}
-          source={require('../../assets/images/png/plusicon.png')}
+      <ScrollView style={styles.content}>
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.carouselContainer}
         />
-        <Text
+
+        {/* sider of card  */}
+        <View style={styles.overviewCards}>
+          <Card style={styles.card}>
+            <Card.Content>
+              <Text style={styles.cardText}>Number of clients</Text>
+              <Text style={styles.cardNumber}>{leadsCount}</Text>
+            </Card.Content>
+          </Card>
+          <Card style={styles.card}>
+            <Card.Content>
+              <Text style={styles.cardText}>Number of Staff</Text>
+              <Text style={styles.cardNumber}>{usersCount}</Text>
+            </Card.Content>
+          </Card>
+        </View>
+
+        <View
           style={{
-            color: appColors.white,
-            fontWeight: '800',
-            fontSize: 15,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}>
-          Create New Lead{' '}
-        </Text>
+          <Text style={styles.headerText2}>Recent Leads</Text>
+          <Text style={styles.headerText3}>View More</Text>
+        </View>
+        <View style={styles.listContainer}>
+          {leadsList.map(card => (
+            <ClientsCard
+              key={card.id}
+              name={card.customerName}
+              date={card.date}
+              time={card.time}
+              status={card.status}
+              mobNum={card.mobileNumber}
+              address={card.address}
+              onPress={() => {
+                handleOnClickViewDetails(card);
+              }}
+            />
+          ))}
+        </View>
+      </ScrollView>
+      <TouchableOpacity onPress={handleonFaviconButton}>
+        <View style={styles.favIcon}>
+          <Image
+            style={{height: 20, width: 20, marginRight: 5}}
+            source={require('../../assets/images/png/plusicon.png')}
+          />
+          <Text
+            style={{color: appColors.white, fontWeight: '800', fontSize: 15}}>
+            Create New Lead{' '}
+          </Text>
+        </View>
       </TouchableOpacity>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {},
+  carouselContainer: {
+    paddingVertical: 10,
+  },
+  itemContainer: {
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  itemImage: {
+    width: 310,
+    height: 200,
+    borderRadius: 8,
+  },
+  itemTitle: {
+    marginTop: 5,
+    fontSize: 16,
+  },
   content: {
     padding: 16,
   },
@@ -224,7 +227,6 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     marginBottom: 16,
-    marginLeft: width * 0.1,
   },
   mainCardText: {
     color: '#fff',
@@ -247,6 +249,7 @@ const styles = StyleSheet.create({
   bottomNavigation: {
     backgroundColor: '#034f84',
   },
+
   container: {
     backgroundColor: '#fff',
   },

@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
-import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import CustomInputField from '../components/CustomInputField';
 import CustomButton from '../components/CustomButton'; // Import the CustomButton component
 import appColors from '../assets/config/Appcolor';
@@ -8,37 +15,83 @@ import Google from '../assets/images/google.png';
 import Facebook from '../assets/images/facebook.png';
 import {useNavigation} from '@react-navigation/native';
 import car1 from '../assets/images/car1.png';
-
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
 
+  const [loginData, setLoginData] = useState({
+    email: '',
+    password: '',
+  });
 
-const [email, setEmail] = useState("");
-const [password, setpassword] = useState("");
+  const [errors, setErrors] = useState({
+    email: '',
+    password: '',
+  });
 
-const handleEmailChange = (text) => {
-  setEmail(text);
-};
+  const onChangeText = (field, text) => {
+    setLoginData({...loginData, [field]: text});
+    const error = validateField(field, text);
+    setErrors({...errors, [field]: error});
+  };
 
-const handlePasswordChange = (text) => {
-  setpassword(text);
-};
-  const handleLogin = () => {
-    // navigation.navigate('FaceDetectionScreen');
-    if(email == "admin" && password == "12345")
-    {
-      navigation.navigate('AdminBottomNavigator');
-
+  const validateField = (field, value) => {
+    let error = '';
+    if (!value) {
+      error = `${field} is required`;
+    } else if (field === 'email' && !/\S+@\S+\.\S+/.test(value)) {
+      error = 'Invalid email format';
+    } else if (field === 'password' && value.length < 6) {
+      error = 'Password must be at least 6 characters';
     }
-    else
-    {
-    //  navigation.navigate('FaceDetectionScreen');
-     navigation.navigate('AdminBottomNavigator');
+    return error;
+  };
 
+  const validateAllFields = () => {
+    const newErrors = {};
+    Object.keys(loginData).forEach(field => {
+      const value = loginData[field];
+      const error = validateField(field, value);
+      newErrors[field] = error;
+    });
+    setErrors(newErrors);
+    const isValid = Object.values(newErrors).every(error => !error);
+    return isValid;
+  };
+
+  // Handle Login
+  const handleLogin = async () => {
+    const isValid = validateAllFields();
+    navigation.navigate('AdminBottomNavigator');
+    if (isValid) {
+      try {
+        const {email, password} = loginData;
+        const userCredential = await auth().signInWithEmailAndPassword(
+          email,
+          password,
+        );
+
+        const user = userCredential.user;
+        const userDoc = (
+          await firestore().collection('users').doc(user.uid).get()
+        ).data();
+
+        if (userDoc && userDoc.role === 'isAdmin') {
+          console.log('admin');
+          navigation.navigate('AdminBottomNavigator');
+        } else {
+          navigation.navigate('BottomNavigator');
+
+        }
+      } catch (e) {
+        console.log(e.message);
+        Alert.alert('Failed to log in', e.message);
+      }
+    } else {
+      console.log('Fill in all fields properly');
     }
-    console.log("Email",email);
-    console.log("Password",password);
   };
 
   const handleForgotPassword = () => {
@@ -52,35 +105,40 @@ const handlePasswordChange = (text) => {
   const handleFacebookSignIn = () => {
     console.log('Facebook sign in pressed');
   };
-  const handleFacebookSignUp = () => {
+
+  const handleSignUp = () => {
     navigation.navigate('SignupScreen');
   };
- 
+
   return (
     <View style={styles.container}>
-      
       <Text style={styles.title}>CAR WASH</Text>
       <Image style={styles.logo} source={logo} />
+      <View style={{width: '100%'}}>
+        <CustomInputField
+          placeholder="Email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCompleteType="email"
+          onChangeText={text => onChangeText('email', text)}
+          error={errors.email}
+          value={loginData.email}
+        />
+        {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
-      <CustomInputField
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCompleteType="email"
-        onChangeText={handleEmailChange}
-        value={email}
-      
-        
-      />
-      <CustomInputField
-        placeholder="Password"
-        secureTextEntry
-        autoCapitalize="none"
-        autoCompleteType="password"
-        onChangeText={handlePasswordChange}
-        value={password}
-      />
-
+        <CustomInputField
+          placeholder="Password"
+          secureTextEntry
+          autoCapitalize="none"
+          autoCompleteType="password"
+          onChangeText={text => onChangeText('password', text)}
+          error={errors.password}
+          value={loginData.password}
+        />
+        {errors.password && (
+          <Text style={styles.errorText}>{errors.password}</Text>
+        )}
+      </View>
       <TouchableOpacity
         style={styles.forgotPasswordContainer}
         onPress={handleForgotPassword}>
@@ -93,14 +151,15 @@ const handlePasswordChange = (text) => {
         <TouchableOpacity
           style={styles.socialButton}
           onPress={handleGoogleSignIn}>
-          <Image source={Facebook} style={styles.logins} />
+          <Image source={Google} style={styles.socialIcon} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.socialButton}
           onPress={handleFacebookSignIn}>
-          <Image source={Google} style={styles.logins} />
+          <Image source={Facebook} style={styles.socialIcon} />
         </TouchableOpacity>
       </View>
+
       <View style={styles.rectangleContainer}>
         <View style={styles.car1}>
           <Image source={car1} />
@@ -108,10 +167,7 @@ const handlePasswordChange = (text) => {
 
         <View style={styles.signupContainer}>
           <Text style={styles.signupText}>Don’t have an account? </Text>
-          <TouchableOpacity
-            onPress={() => {
-              handleFacebookSignUp();
-            }}>
+          <TouchableOpacity onPress={handleSignUp}>
             <Text style={styles.signupLink}>Signup</Text>
           </TouchableOpacity>
         </View>
@@ -137,11 +193,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 150,
     height: 150,
-  
-  },
-  logins: {
-    width: 38,
-    height: 38,
   },
   forgotPasswordContainer: {
     alignSelf: 'flex-end',
@@ -155,18 +206,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 20,
     transform: [{skewY: '-10deg'}],
-
   },
   signupText: {
     color: appColors.white,
-    marginTop:20
-
+    marginTop: 20,
   },
   signupLink: {
     color: '#fff',
     fontWeight: 'bold',
     textDecorationLine: 'underline',
-    marginTop:20
+    marginTop: 20,
   },
   socialLoginContainer: {
     flexDirection: 'row',
@@ -181,7 +230,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginHorizontal: 10,
   },
-  logins: {
+  socialIcon: {
     width: 38,
     height: 38,
   },
@@ -189,10 +238,10 @@ const styles = StyleSheet.create({
     position: 'relative',
     backgroundColor: appColors.secondary,
     bottom: -60,
-    width: 450,
+    width: '120%',
     borderTopLeftRadius: 50,
     borderTopRightRadius: 80,
-    height: 250,
+    height: '40%',
     alignItems: 'center',
     justifyContent: 'center',
     transform: [{skewY: '10deg'}],
@@ -200,9 +249,13 @@ const styles = StyleSheet.create({
   car1: {
     flex: 1,
     position: 'absolute',
- 
     top: 50,
     transform: [{skewY: '-10deg'}],
+  },
+  errorText: {
+    color: 'red',
+    marginTop: -10,
+    marginBottom: 10,
   },
 });
 

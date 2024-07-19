@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {BackHandler, Alert} from 'react-native';
+import {useEffect} from 'react';
 import SignupScreen from './SignupScreen';
 import Dashboard from './Staff/Dashboard';
 import BottomNavigator from './Staff/navigator/BottomNavigator';
@@ -9,14 +11,15 @@ import WorkHistoryScreen from './WorkHistoryScreen';
 import LoginScreen from './LoginScreen';
 import SplashScreen from './SplashScreen';
 import FaceDetectionScreen from './FaceDetectionScreen';
-import AdminDashboardScreen from './Admin/AdminDashboardScreen';
 import AdminBottomNavigator from './Admin/adminNavigator/AdminBottomNavigator';
 import FormScreen from './Admin/FormScreen';
 import AttandanceScreen from './AttandanceScreen';
+import SignupScreenNextPage from './SignupScreenNextPage';
 
 const Stack = createNativeStackNavigator();
 
-export default function StackNavigator() {
+const StackNavigator = () => {
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen">
@@ -45,7 +48,6 @@ export default function StackNavigator() {
           component={Dashboard}
           options={{headerShown: false}}
         />
-
         <Stack.Screen
           name="BottomNavigator"
           component={BottomNavigator}
@@ -67,7 +69,6 @@ export default function StackNavigator() {
           options={{headerShown: false}}
         />
         {/* Admin Related Navigation  */}
-     
         <Stack.Screen
           name="AdminBottomNavigator"
           component={AdminBottomNavigator}
@@ -78,8 +79,14 @@ export default function StackNavigator() {
           component={FormScreen}
           options={{headerShown: false}}
         />
-     
+        <Stack.Screen
+          name="SignupScreenNextPage"
+          component={SignupScreenNextPage}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
+
+export default StackNavigator;

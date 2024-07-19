@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, TextInput, Image, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
+import appColors from '../assets/config/Appcolor';
 
-const CustomInputField = ({ leftIcon, rightIcon, placeholder,onChangeText,value, ...rest }) => {
+const CustomInputField = ({ leftIcon,keyboardType, rightIcon, placeholder,onChangeText,value,error,...rest }) => {
   return (
-    <View style={styles.inputContainer}>
+    <View style={[styles.inputContainer,{borderColor:!error ? appColors.primary : 'red'}]}>
       {leftIcon && <Image source={leftIcon} style={styles.leftIcon} />}
       <TextInput
         style={styles.input}
@@ -13,6 +14,8 @@ const CustomInputField = ({ leftIcon, rightIcon, placeholder,onChangeText,value,
         {...rest}
         onChangeText={onChangeText}
         value={value}
+        keyboardType={keyboardType}
+
       />
       {rightIcon && <Image source={rightIcon} style={styles.rightIcon} />}
     </View>
@@ -25,9 +28,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ffffff',
     height: 50,
-    borderRadius: 25,
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#ccc',
+    
     paddingHorizontal: 10,
     marginBottom: 10,
   },
@@ -46,6 +49,7 @@ const styles = StyleSheet.create({
     height: '100%',
     fontSize: 16,
     color: '#333333',
+    borderColor:'red'
   },
 });
 

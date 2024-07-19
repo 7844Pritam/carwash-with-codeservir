@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "849745755586",
+    "project_id": "carcleanplus-1",
+    "storage_bucket": "carcleanplus-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849745755586:android:93fb19102f273da5946a5b",
+        "android_client_info": {
+          "package_name": "com.codeservir.carwash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ3Da6J5KL7RIT2D3MgMmfSWmFkQ_4E6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

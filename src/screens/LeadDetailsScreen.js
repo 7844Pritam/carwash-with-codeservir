@@ -12,7 +12,6 @@ import {
 import {Button} from 'react-native-paper';
 import appColors from '../assets/config/Appcolor';
 
-// Enable LayoutAnimation for Android
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -66,10 +65,10 @@ const LeadDetailsScreen = ({route, navigation}) => {
       <View style={styles.bgRectangle}>
         <View style={styles.cardOne}>
           <View style={styles.cardContent}>
-            <Text style={styles.cardText}>Name: {cards.name}</Text>
+            <Text style={styles.cardText}>Name: {cards.customerName}</Text>
           </View>
           <View style={styles.cardContent}>
-            <Text style={styles.cardText}>Number: {cards.mobNum}</Text>
+            <Text style={styles.cardText}>Number: {cards.mobileNumber}</Text>
           </View>
           <View style={styles.cardContent}>
             <Text style={styles.cardText}>Address: {cards.address}</Text>

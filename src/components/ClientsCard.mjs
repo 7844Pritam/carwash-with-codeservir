@@ -3,13 +3,12 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import CustomButton from './CustomButton';
 import appColors from '../assets/config/Appcolor';
 
-const ClientsCard = ({key,name,date,time, status, isAvailable, mobNum, address,onPress}) => {
+const ClientsCard = ({name,date,time, status, isAvailable, mobNum, address,onPress}) => {
 
   return (
     <View style={styles.card}>
       <View style={styles.topSection}>
-        <View style={styles.status}>
-        <Text style={styles.statusText}>{status}</Text>
+        <View style={{backgroundColor:appColors.white,height:32,width:32,borderRadius:60,alignContent:'center',alignItems:'center'}}>
         </View>
         <View style={styles.nameContainer}>
           <Text style={styles.name}>{name}</Text>
@@ -38,8 +37,8 @@ const ClientsCard = ({key,name,date,time, status, isAvailable, mobNum, address,o
           </View>
         </View>
         <View style={styles.availability}>
-          <Text style={isAvailable ? styles.available : styles.notAvailable}>
-            {isAvailable? 'Available' : 'Not Available'}
+          <Text style={status==='Pending' ? styles.available : styles.notAvailable}>
+            {status}
           </Text>
         </View>
       </View>
@@ -131,16 +130,19 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
     backgroundColor:'white',
-    paddingHorizontal:10,
-    borderRadius:20
+    paddingHorizontal:16,
+    paddingVertical:4,
+    borderRadius:20,
   },
   available: {
     color: 'green',
     fontWeight: 'bold',
+    fontSize:10,
   },
   notAvailable: {
     color: 'red',
     fontWeight: 'bold',
+    fontSize:10
   },
   buttonSeparator: {
     borderTopWidth: 1,

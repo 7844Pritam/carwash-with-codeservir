@@ -19,10 +19,10 @@ const data = [
   {id: '4', name: 'John Dube', userId: '34', position: 'Position'},
   {id: '5', name: 'John Dube', userId: '34', position: 'Position'},
   {id: '6', name: 'John Dube', userId: '34', position: 'Position'},
-  {id: '6', name: 'John Dube', userId: '34', position: 'Position'},
-  {id: '6', name: 'John Dube', userId: '34', position: 'Position'},
-  {id: '6', name: 'John Dube', userId: '34', position: 'Position'},
-  {id: '6', name: 'John Dube', userId: '34', position: 'Position'},
+  {id: '7', name: 'John Dube', userId: '34', position: 'Position'},
+  {id: '8', name: 'John Dube', userId: '34', position: 'Position'},
+  {id: '9', name: 'John Dube', userId: '34', position: 'Position'},
+  {id: '10', name: 'John Dube', userId: '34', position: 'Position'},
 ];
 
 const StaffScreen = () => {

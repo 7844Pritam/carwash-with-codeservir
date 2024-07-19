@@ -1,14 +1,30 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity, Image, Alert} from 'react-native';
 import appColors from '../assets/config/Appcolor';
 import TopBar from '../components/TopBar';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import cameraImage from '../assets/images/png/camera.png';
 import dummyImage from '../assets/images/png/persion_dummy.png';
-
+import gmailIcon from '../assets/images/png/gmail.png';
+import personIcon from '../assets/images/png/person_fill.png';
+import mobileIcon from '../assets/images/png/mobileIcon.png';
+import workIcon from '../assets/images/png/workIcon.png';
+import paymentIcon from '../assets/images/png/paymentIcon.png';
+import CustomButton from '../components/CustomButton';
+import auth from '@react-native-firebase/auth';
 const ProfileScreen = () => {
   const navigation = useNavigation();
-
+  const handleLogout = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        Alert.alert('Logout Success', 'You have been logged out.');
+        navigation.navigate('LoginScreen'); 
+      })
+      .catch(error => {
+        Alert.alert('Logout Error', error.message);
+      });
+  };
   return (
     <View style={styles.container}>
       <TopBar heading={'Profile'} />
@@ -25,12 +41,12 @@ const ProfileScreen = () => {
           <Text style={styles.sectionTitle}>Personal Details</Text>
           <View style={styles.separator} />
           <View style={styles.detailItem}>
-            <Image source={cameraImage} style={styles.detailIcon} />
-            <Text style={styles.profileInfo}>Software Engineer</Text>
+            <Image source={personIcon} style={styles.detailIcon} />
+            <Text style={styles.profileInfo}>Name: Software Engineer</Text>
           </View>
           <View style={styles.detailItem}>
-            <Image source={cameraImage} style={styles.detailIcon} />
-            <Text style={styles.profileInfo}>john.doe@example.com</Text>
+            <Image source={gmailIcon} style={styles.detailIcon} />
+            <Text style={styles.profileInfo}>Email: john.doe@example.com</Text>
           </View>
         </View>
 
@@ -38,7 +54,7 @@ const ProfileScreen = () => {
           <Text style={styles.sectionTitle}>Contact Details</Text>
           <View style={styles.separator} />
           <View style={styles.detailItem}>
-            <Image source={cameraImage} style={styles.detailIcon} />
+            <Image source={mobileIcon} style={styles.detailIcon} />
             <Text style={styles.profileInfo}>Mob Number: 34344344534</Text>
           </View>
         </View>
@@ -47,28 +63,39 @@ const ProfileScreen = () => {
           <Text style={styles.sectionTitle}>Others</Text>
           <View style={styles.separator} />
           <View style={styles.detailItem}>
-            <Image source={cameraImage} style={styles.detailIcon} />
+            <Image source={paymentIcon} style={styles.detailIcon} />
             <Text style={styles.profileInfo}>Salary History</Text>
             <Text style={styles.linkText}>Click to View</Text>
           </View>
           <View style={styles.detailItem}>
-            <Image source={cameraImage} style={styles.detailIcon} />
+            <Image source={workIcon} style={styles.detailIcon} />
             <Text style={styles.profileInfo}>Work History</Text>
             <Text style={styles.linkText}>Click to View</Text>
           </View>
         </View>
+
+        <CustomButton
+          onPress={handleLogout}
+          stylesecond={styles.buttonsytle}
+          title={'Logout'}
+        />
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonsytle: {
+    backgroundColor: appColors.secondary,
+    width: '100%',
+  },
   container: {
     flex: 1,
     backgroundColor: appColors.white,
   },
   profileBox: {
     padding: 16,
+    marginHorizontal: 10,
   },
   imageContainer: {
     alignItems: 'center',
@@ -109,8 +136,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: appColors.black,
-    marginBottom: 10,
+    color: appColors.secondary,
   },
   detailItem: {
     flexDirection: 'row',
